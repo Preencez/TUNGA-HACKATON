@@ -21,7 +21,7 @@ def generate_readme(api_key, repo_content):
     response = openai.Completion.create(
         engine="text-davinci-003",
         prompt=formatted_prompt,
-        max_tokens=1024
+        max_tokens=3000
     )
     return response.choices[0].text.strip()
 
