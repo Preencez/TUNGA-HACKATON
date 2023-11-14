@@ -1,20 +1,15 @@
 import streamlit as st
-import os
-from dotenv import load_dotenv
+import json
 from utils import parse_github_url, get_repo_files, get_file_content
 from generate_readme import generate_readme
 
-# Load environment variables
-load_dotenv()
-
-# Streamlit app
 def main():
     st.title("GitHub README Generator")
 
     # User inputs
     repo_url = st.text_input("Enter the GitHub repository URL:")
     token = st.text_input("Enter your GitHub access token:", type="password")
-    openai_api_key = os.getenv("OPENAI_API_KEY")
+    openai_api_key = st.text_input("Enter your OpenAI API key:", type="password")
 
     generate_button = st.button("Generate README")
 
