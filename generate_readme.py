@@ -19,7 +19,7 @@ def generate_readme(api_key, repo_content):
 
     openai.api_key = api_key
     response = openai.Completion.create(
-        engine="text-davinci-003",
+        engine="gpt-3.5-turbo",
         prompt=formatted_prompt,
         max_tokens=3000
     )
