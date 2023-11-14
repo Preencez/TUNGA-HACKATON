@@ -1,7 +1,7 @@
 # from langchain.chains import LLMChain
 from langchain.llms import OpenAI
 from langchain.prompts import PromptTemplate
-import openai
+from openai import OpenAI
 
 def generate_readme(api_key, repo_content):
     # llm = OpenAI(api_key=api_key)
@@ -17,9 +17,10 @@ def generate_readme(api_key, repo_content):
 
     formatted_prompt = prompt_template.format(text=repo_content)
 
-    openai.api_key = api_key
-    response = openai.Completion.create(
-        engine="gpt-3.5-turbo",
+    client = OpenAI()
+    client.api_key = api_key
+    response = client.chat.completions.create(
+        engine="gpt-3.5-turbo-0613",
         prompt=formatted_prompt,
         max_tokens=3000
     )
