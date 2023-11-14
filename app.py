@@ -1,6 +1,6 @@
 import streamlit as st
 import json
-from utils import parse_github_url, get_repo_files, get_file_content
+from utils import parse_github_url, get_repo_files, get_file_content, find_next_readme_name, create_commit_readme
 from generate_readme import generate_readme
 
 def main():
@@ -27,6 +27,12 @@ def main():
             readme_content = generate_readme(openai_api_key, json_data)
 
             st.text_area("Generated README:", readme_content, height=300)
+
+            user, repo = parse_github_url(repo_url)
+            readme_file_name = find_next_readme_name(user, repo, token)
+            create_commit_readme(user, repo, token, readme_file_name, readme_content)
+
+            st.success(f"README file '{readme_file_name}' successfully created in the repository.")
 
         except Exception as e:
             st.error(f"Error: {e}")
