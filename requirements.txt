@@ -2,4 +2,4 @@ streamlit
 python-dotenv
 requests
 langchain
-openai
+openai==0.28
