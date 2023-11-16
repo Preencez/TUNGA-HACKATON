@@ -17,7 +17,8 @@ def get_repo_files(user, repo, token, branch='main'):
     response.raise_for_status()
 
     tree = response.json().get('tree', [])
-    return [(item['path'], item['url']) for item in tree if item['type'] == 'blob']
+    # Filter out .md and .txt files
+    return [(item['path'], item['url']) for item in tree if item['type'] == 'blob' and not (item['path'].endswith('.md') or item['path'].endswith('.txt'))]
 
 def get_file_content(url, token):
     headers = {'Authorization': f'token {token}'}
