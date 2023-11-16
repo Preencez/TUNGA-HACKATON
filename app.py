@@ -1,7 +1,7 @@
 import streamlit as st
-from utils import parse_github_url, get_repo_files, get_file_content, find_next_readme_name, create_commit_readme
-from generate_readme import generate_readme
 import json
+from utils import parse_github_url, get_repo_files, get_file_content
+from generate_readme import generate_readme
 
 def main():
     st.title("GitHub README Generator")
@@ -15,32 +15,21 @@ def main():
 
     if generate_button and repo_url and token and openai_api_key:
         try:
-            # Extract user and repo from the URL
             user, repo = parse_github_url(repo_url)
+            file_data_pairs = get_repo_files(user, repo, token)
+            file_contents = {}
 
-            # Get files from the repo
-            file_data = get_repo_files(user, repo, token)
-            
-            # Prepare content for README generation
-            repo_content = {}
-            for file_name, file_url in file_data:
-                file_content = get_file_content(file_url, token)
-                repo_content[file_name] = file_content
+            for file_name, url in file_data_pairs:
+                content = get_file_content(url, token)
+                file_contents[file_name] = content
 
-            # Generate README content
-            json_data = json.dumps(repo_content, indent=4)
+            json_data = json.dumps(file_contents, indent=4)
             readme_content = generate_readme(openai_api_key, json_data)
 
-            # Display generated README
             st.text_area("Generated README:", readme_content, height=300)
+            st.markdown("Copy the above content and paste it into your README file.")
 
-            # Find a suitable name for the README file
-            readme_file_name = find_next_readme_name(user, repo, token)
-
-            # Commit the README file to the repo
-            create_commit_readme(user, repo, token, readme_file_name, readme_content)
-
-            st.success(f"README file '{readme_file_name}' successfully created in the repository.")
+            st.success("README content generated successfully. Please copy and paste it into your repository.")
 
         except Exception as e:
             st.error(f"Error: {e}")
