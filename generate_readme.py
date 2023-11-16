@@ -1,4 +1,7 @@
 # from langchain.chains import LLMChain
+import sys
+print(sys.path)
+
 from langchain.llms import OpenAI
 from langchain.prompts import PromptTemplate
 import openai
@@ -26,7 +29,7 @@ def generate_readme(api_key, repo_content):
     return response.choices[0].text.strip()
 
 # content = """
-# from langchain.chains import LLMChain
+ #from langchain.chains import LLMChain
 # from langchain.llms import OpenAI
 # from langchain.prompts import PromptTemplate
 
