@@ -36,13 +36,13 @@ def get_file_content(url, token):
     else:
         return "Binary file or non-utf-8 content detected"
 
-def create_or_update_readme(user, repo, token, content, branch='main'):
+def create_readme_in_branch(user, repo, token, content, branch='main'):
     # Check if README.md exists and find a unique name
-    file_name, file_exists = get_unique_readme_name(user, repo, token, branch)
+    file_name, _ = get_unique_readme_name(user, repo, token, branch)
     file_path = f"{file_name}.md"
-    message = f"Create {file_path}" if not file_exists else f"Update {file_path}"
+    message = f"Create {file_path}"
 
-    # GitHub API URL to create/update file
+    # GitHub API URL to create the file
     url = f"https://api.github.com/repos/{user}/{repo}/contents/{file_path}"
 
     # Prepare the content in base64 encoding
@@ -54,11 +54,6 @@ def create_or_update_readme(user, repo, token, content, branch='main'):
         "content": encoded_content,
         "branch": branch
     }
-
-    if file_exists:
-        # If file exists, get its sha
-        sha = get_file_sha(url, token)
-        data['sha'] = sha
 
     # Send the request
     headers = {'Authorization': f'token {token}'}
@@ -77,15 +72,14 @@ def get_unique_readme_name(user, repo, token, branch):
     while any(f"{base_name}{index if index else ''}{extension}" in file for file, _ in files):
         index += 1
 
-    file_exists = index == 0  # True if README.md exists
     file_name = f"{base_name}{index if index else ''}"
 
-    return file_name, file_exists
+    return file_name, False
 
-def get_file_sha(url, token):
-    headers = {'Authorization': f'token {token}'}
-    response = requests.get(url, headers=headers)
-    response.raise_for_status()
+# def get_file_sha(url, token):
+#     headers = {'Authorization': f'token {token}'}
+#     response = requests.get(url, headers=headers)
+#     response.raise_for_status()
 
-    return response.json().get('sha')
+#     return response.json().get('sha')
 

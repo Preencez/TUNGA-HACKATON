@@ -39,26 +39,27 @@ def main():
     generate_button = st.button("Generate README")
 
     if generate_button and repo_url and token and openai_api_key:
-        try:
-            user, repo = parse_github_url(repo_url)
-            file_data_pairs = get_repo_files(user, repo, token)
-            file_contents = {}
+    try:
+        user, repo = parse_github_url(repo_url)
+        branch = repo_url.split('/')[-3]  # Extract branch from URL
+        file_data_pairs = get_repo_files(user, repo, token, branch)
+        file_contents = {}
 
-            for file_name, url in file_data_pairs:
-                content = get_file_content(url, token)
-                file_contents[file_name] = content
+        for file_name, url in file_data_pairs:
+            content = get_file_content(url, token)
+            file_contents[file_name] = content
 
-            json_data = json.dumps(file_contents, indent=4)
-            readme_content = generate_readme(openai_api_key, json_data)
+        json_data = json.dumps(file_contents, indent=4)
+        readme_content = generate_readme(openai_api_key, json_data)
 
-            # Create or update the README in the GitHub repository
-            response = create_or_update_readme(user, repo, token, readme_content)
-            readme_url = response.get('content', {}).get('html_url', 'URL not available')
+        # Create the README in the specified branch of the GitHub repository
+        response = create_readme_in_branch(user, repo, token, readme_content, branch)
+        readme_url = response.get('content', {}).get('html_url', 'URL not available')
 
-            st.success(f"README content generated and updated in the repository. You can view it [here]({readme_url}).")
+        st.success(f"README content generated and updated in the repository branch '{branch}'. You can view it [here]({readme_url}).")
 
-        except Exception as e:
-            st.error(f"Error: {e}")
+    except Exception as e:
+        st.error(f"Error: {e}")
 
 if __name__ == "__main__":
     main()
