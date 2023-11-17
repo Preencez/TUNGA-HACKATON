@@ -38,10 +38,13 @@ def main():
 
     generate_button = st.button("Generate README")
 
-    if generate_button and repo_url and token and openai_api_key:
+     if generate_button and repo_url and token and openai_api_key:
         try:
-            user, repo = parse_github_url(repo_url)
-            branch = repo_url.split('/')[-3]  # Extract branch from URL
+            user, repo, branch = parse_github_url(repo_url)
+            if not user or not repo:
+                st.error("Invalid GitHub URL")
+                return
+
             file_data_pairs = get_repo_files(user, repo, token, branch)
             file_contents = {}
 
@@ -60,6 +63,7 @@ def main():
 
         except Exception as e:
             st.error(f"Error: {e}")
+
 
 if __name__ == "__main__":
     main()

@@ -4,11 +4,12 @@ import base64
 import json
 
 def parse_github_url(url):
-    match = re.search(r"github\.com/([^/]+)/([^/]+)", url)
+    match = re.search(r"github\.com/([^/]+)/([^/]+)(?:/tree|/blob)/([^/]+)", url)
     if match:
-        return match.group(1), match.group(2)
+        return match.group(1), match.group(2), match.group(3)
     else:
-        raise ValueError("Invalid GitHub URL")
+        # Return user, repo, and a default branch if not specified
+        return None, None, 'main'
 
 def get_repo_files(user, repo, token, branch='main'):
     base_url = f"https://api.github.com/repos/{user}/{repo}/git/trees/{branch}?recursive=1"
