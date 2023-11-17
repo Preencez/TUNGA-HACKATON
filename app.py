@@ -38,7 +38,7 @@ def main():
 
     generate_button = st.button("Generate README")
 
-     if generate_button and repo_url and token and openai_api_key:
+    if generate_button and repo_url and token and openai_api_key:
         try:
             user, repo, branch = parse_github_url(repo_url)
             if not user or not repo:
