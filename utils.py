@@ -38,25 +38,26 @@ def get_file_content(url, token):
         return "Binary file or non-utf-8 content detected"
 
 def create_readme_in_branch(user, repo, token, content, branch='main'):
-    # Check if README.md exists and find a unique name
     file_name, _ = get_unique_readme_name(user, repo, token, branch)
     file_path = f"{file_name}.md"
     message = f"Create {file_path}"
-
-    # GitHub API URL to create the file
-    url = f"https://api.github.com/repos/{user}/{repo}/contents/{file_path}"
-
-    # Prepare the content in base64 encoding
     encoded_content = base64.b64encode(content.encode('utf-8')).decode('utf-8')
 
-    # Prepare the data
+    # Check if file exists and get its sha
+    sha = get_file_sha(user, repo, token, file_path, branch)
+    if sha:
+        message = f"Update {file_path}"
+
     data = {
         "message": message,
         "content": encoded_content,
         "branch": branch
     }
 
-    # Send the request
+    if sha:
+        data['sha'] = sha
+
+    url = f"https://api.github.com/repos/{user}/{repo}/contents/{file_path}"
     headers = {'Authorization': f'token {token}'}
     response = requests.put(url, headers=headers, json=data)
     response.raise_for_status()
@@ -76,6 +77,14 @@ def get_unique_readme_name(user, repo, token, branch):
     file_name = f"{base_name}{index if index else ''}"
 
     return file_name, False
+
+def get_file_sha(user, repo, token, file_path, branch):
+    url = f"https://api.github.com/repos/{user}/{repo}/contents/{file_path}?ref={branch}"
+    headers = {'Authorization': f'token {token}'}
+    response = requests.get(url, headers=headers)
+    if response.status_code == 200:
+        return response.json().get('sha')
+    return None
 
 # def get_file_sha(url, token):
 #     headers = {'Authorization': f'token {token}'}
