@@ -66,7 +66,7 @@ def create_readme_in_branch(user, repo, token, content, branch='main'):
 
 def get_unique_readme_name(user, repo, token, branch):
     files = get_repo_files(user, repo, token, branch)
-    base_name = "README"
+    base_name = "aiREADME"
     extension = ".md"
     index = 0
 
@@ -86,10 +86,4 @@ def get_file_sha(user, repo, token, file_path, branch):
         return response.json().get('sha')
     return None
 
-# def get_file_sha(url, token):
-#     headers = {'Authorization': f'token {token}'}
-#     response = requests.get(url, headers=headers)
-#     response.raise_for_status()
-
-#     return response.json().get('sha')
 
