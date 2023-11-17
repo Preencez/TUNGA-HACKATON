@@ -20,12 +20,12 @@ def main():
 
     steps = [
         "Enter the GitHub repository URL.",
-        "Generate a GitHub access token. [Learn how to generate an access token](https://docs.github.com/en/enterprise-server@3.6/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens)",
+        "Generate a GitHub access token (Make sure to give the appropriate permissions). [Learn how to generate an access token](https://docs.github.com/en/enterprise-server@3.6/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens)",
         "Enter your GitHub access token.",
         "Generate an OpenAI API key. [Learn how to generate an API key](https://platform.openai.com/docs/quickstart?context=python)",
         "Enter your OpenAI API key.",
         "Click the 'Generate README' button.",
-        "Review the generated README and copy-paste the result into your README.md file."
+        "The README file is now created in your repo. Follow the link to view."
     ]
 
     for index, step in enumerate(steps, start=1):
