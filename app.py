@@ -1,15 +1,5 @@
 import streamlit as st
 import json
-
-# Placeholder functions (replace these with your actual implementations)
-def find_next_readme_name(user, repo, token):
-    # Your implementation here
-    return "placeholder_readme.md"
-
-def create_commit_readme(user, repo, token, readme_file_name, readme_content):
-    # Your implementation here
-    pass
-
 from utils import parse_github_url, get_repo_files, get_file_content
 from generate_readme import generate_readme
 
@@ -22,16 +12,29 @@ def main():
     openai_api_key = st.text_input("Enter your OpenAI API key:", type="password")
 
     # Additional information about the app in the sidebar
-    st.sidebar.image("https://th.bing.com/th/id/OIP.APmJvXP1CyR94wFUG8VgKwHaGh?rs=1&pid=ImgDetMain")
+    st.sidebar.image("https://images.unsplash.com/photo-1546776310-eef45dd6d63c?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8cm9ib3R8ZW58MHx8MHx8fDA%3D")
     st.sidebar.title("About the App")
-    st.sidebar.markdown("This app generates a README file for your GitHub repository.")
-    st.sidebar.markdown("It uses OpenAI to analyze your repository files and create a summary.")
+    st.sidebar.markdown("This app assists in generating a README file for your GitHub repository.")
+    st.sidebar.markdown("It utilizes OpenAI to analyze your repository files and create a README file.")
     st.sidebar.markdown("Follow the steps below to use the app:")
-    st.sidebar.markdown("1. Enter the GitHub repository URL.")
-    st.sidebar.markdown("2. Enter your GitHub access token.")
-    st.sidebar.markdown("3. Enter your OpenAI API key.")
-    st.sidebar.markdown("4. Click the 'Generate README' button.")
-    st.sidebar.markdown("5. Review the generated README in the main panel.")
+
+    steps = [
+        "Enter the GitHub repository URL.",
+        "Generate a GitHub access token. [Learn how to generate an access token](https://docs.github.com/en/enterprise-server@3.6/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens)",
+        "Enter your GitHub access token.",
+        "Generate an OpenAI API key. [Learn how to generate an API key](https://platform.openai.com/docs/quickstart?context=python)",
+        "Enter your OpenAI API key.",
+        "Click the 'Generate README' button.",
+        "Review the generated README and copy-paste the result into your README.md file."
+    ]
+
+    for index, step in enumerate(steps, start=1):
+        if index == 2:
+            st.sidebar.markdown(f"{index}. {step}")
+        elif index == 4:
+            st.sidebar.markdown(f"{index}. {step}")
+        else:
+            st.sidebar.markdown(f"{index}. {step}")
 
     generate_button = st.button("Generate README")
 
@@ -48,19 +51,10 @@ def main():
             json_data = json.dumps(file_contents, indent=4)
             readme_content = generate_readme(openai_api_key, json_data)
 
-            # Save the generated README to a file
-            with open("generated_readme.md", "w", encoding="utf-8") as readme_file:
-                readme_file.write(readme_content)
-
             st.text_area("Generated README:", readme_content, height=300)
             st.markdown("Copy the above content and paste it into your README file.")
 
-            user, repo = parse_github_url(repo_url)
-            readme_file_name = find_next_readme_name(user, repo, token)
-            create_commit_readme(user, repo, token, readme_file_name, readme_content)
-
-            st.success(f"README file '{readme_file_name}' successfully created in the repository.")
-        
+            st.success("README content generated successfully. Please copy and paste it into your repository.")
 
         except Exception as e:
             st.error(f"Error: {e}")
