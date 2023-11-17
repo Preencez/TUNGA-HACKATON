@@ -51,10 +51,11 @@ def main():
             json_data = json.dumps(file_contents, indent=4)
             readme_content = generate_readme(openai_api_key, json_data)
 
-            st.text_area("Generated README:", readme_content, height=300)
-            st.markdown("Copy the above content and paste it into your README file.")
+            # Create or update the README in the GitHub repository
+            response = create_or_update_readme(user, repo, token, readme_content)
+            readme_url = response.get('content', {}).get('html_url', 'URL not available')
 
-            st.success("README content generated successfully. Please copy and paste it into your repository.")
+            st.success(f"README content generated and updated in the repository. You can view it [here]({readme_url}).")
 
         except Exception as e:
             st.error(f"Error: {e}")
