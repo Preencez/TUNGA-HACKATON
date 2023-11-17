@@ -1,6 +1,6 @@
 import streamlit as st
 import json
-from utils import parse_github_url, get_repo_files, get_file_content, find_next_readme_name, create_commit_readme
+from utils import parse_github_url, get_repo_files, get_file_content
 from generate_readme import generate_readme
 
 def main():
@@ -46,13 +46,18 @@ def main():
                 readme_file.write(readme_content)
 
             st.text_area("Generated README:", readme_content, height=300)
+            st.markdown("Copy the above content and paste it into your README file.")
 
+<<<<<<< HEAD
             user, repo = parse_github_url(repo_url)
             readme_file_name = find_next_readme_name(user, repo, token)
             create_commit_readme(user, repo, token, readme_file_name, readme_content)
 
             st.success(f"README file '{readme_file_name}' successfully created in the repository.")
             st.success(f"Generated README saved to 'generated_readme.md'.")
+=======
+            st.success("README content generated successfully. Please copy and paste it into your repository.")
+>>>>>>> d61be2e5be9300921ba0c94e4ce36df19e4394f8
 
         except Exception as e:
             st.error(f"Error: {e}")
