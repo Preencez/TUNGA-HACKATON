@@ -14,8 +14,8 @@ def main():
     # Additional information about the app in the sidebar
     st.sidebar.image("https://images.unsplash.com/photo-1546776310-eef45dd6d63c?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8cm9ib3R8ZW58MHx8MHx8fDA%3D")
     st.sidebar.title("About the App")
-    st.sidebar.markdown("This app assists in generating a README file for your GitHub repository.")
-    st.sidebar.markdown("It utilizes OpenAI to analyze your repository files and create a README file.")
+    st.sidebar.markdown("This app assists in generating a README file directly into your GitHub repository.")
+    st.sidebar.markdown("It utilizes OpenAI to analyze your repository files and create a README file in the repo.")
     st.sidebar.markdown("Follow the steps below to use the app:")
 
     steps = [
