@@ -1,6 +1,6 @@
 import streamlit as st
 import json
-from utils import parse_github_url, get_repo_files, get_file_content, create_or_update_readme
+from utils import parse_github_url, get_repo_files, get_file_content, create_readme_in_branch
 from generate_readme import generate_readme
 
 def main():
